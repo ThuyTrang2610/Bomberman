@@ -39,7 +39,7 @@ public class Bomber extends Mob {
                     &&(x3 != x2 || y3 != y2)
 
             ) throughBomb = false;
-            System.out.println(throughBomb);
+            //System.out.println(throughBomb);
         }
     }
 
