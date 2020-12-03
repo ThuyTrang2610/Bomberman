@@ -11,7 +11,7 @@ import java.nio.IntBuffer;
 public class Sprite {
 	
 	public static final int DEFAULT_SIZE = 16;
-	public static final int SCALED_SIZE = DEFAULT_SIZE * 2;
+	public static final int SCALED_SIZE = DEFAULT_SIZE * 3;
     private static final int TRANSPARENT_COLOR = 0xffff00ff;
 	public final int SIZE;
 	private int _x, _y;
@@ -233,7 +233,7 @@ public class Sprite {
 	
 	public static Sprite movingSprite(Sprite x1, Sprite x2, int animate, int time) {
 		int diff = time / 2;
-		return (animate % time > diff) ? x1 : x2; 
+		return (animate % time >= diff) ? x1 : x2;
 	}
 	
 	public int getSize() {
