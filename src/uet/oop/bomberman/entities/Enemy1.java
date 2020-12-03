@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Enemy1 extends Mob{
 
-    private ArrayList<int> directions;
+    private ArrayList<Integer> directions;
     public Enemy1 (int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
 
