@@ -26,13 +26,23 @@ public class BombermanGame extends Application {
 
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<Entity> entities = new ArrayList<>();
+    private static List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
     private  static List<Entity> bombs = new ArrayList<>();
     private static HashSet<String> currentlyActiveKeys = new HashSet<>();
 
+    long deadTime = 0;
+
     public static HashSet<String> getCurrentlyActiveKeys() {
         return currentlyActiveKeys;
+    }
+
+    public static List<Entity> getEntities() {
+        return entities;
+    }
+
+    public static void setEntities(List<Entity> entities) {
+        BombermanGame.entities = entities;
     }
 
     public static void setCurrentlyActiveKeys(HashSet<String> currentlyActiveKeys) {
@@ -88,8 +98,6 @@ public class BombermanGame extends Application {
 
         Entity bomberman = new Bomber(1 * Sprite.SCALED_SIZE, 1 * Sprite.SCALED_SIZE, Sprite.player_down.getFxImage());
         entities.add(bomberman);
-        Bomb b = new Bomb(2 * Sprite.SCALED_SIZE, 2 * Sprite.SCALED_SIZE, Sprite.bomb.getFxImage());
-        //bombs.add(b);
         createMap();
     }
 
@@ -127,20 +135,59 @@ public class BombermanGame extends Application {
                                 , i * Sprite.SCALED_SIZE, Sprite.brick.getFxImage());
                         break;
                     }
+                    case '1':
+                    {
+
+                        entities.add(new Enemy1(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.balloom_right1.getFxImage()));
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+
+                        break;
+                    }
+                    case 'p':
+                    {
+                        map[i][j] = ' ';
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+
+                        break;
+
+                    }
                     default: {
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
                     }
                 }
-
-
-                stillObjects.add(o);
+                    stillObjects.add(o);
             }
         }
         System.out.println(stillObjects);
     }
 
     public void update() {
-        entities.forEach(Entity::update);
+        for(int i = 0;i < entities.size(); i ++) {
+            if (entities.get(i) instanceof Mob) {
+                Mob m = (Mob) entities.get(i);
+                m.update();
+                if (m.isDead()) {
+                    if(m instanceof Bomber) {
+                        if (deadTime == 0) {
+                            deadTime = System.currentTimeMillis();
+                        } else
+                        {
+                            if (System.currentTimeMillis() - deadTime <= 1500) {
+                                m.setImg(Sprite.movingSprite(
+                                        Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3,
+                                        (int) (System.currentTimeMillis() - deadTime), 1500).getFxImage());
+                            }
+                            else {
+                                entities.remove(i);
+                            }
+                        }
+                    } else {
+                        entities.remove(i);
+                    }
+                }
+            }
+        }
     }
 
     public void render() {

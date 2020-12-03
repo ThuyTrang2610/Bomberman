@@ -10,12 +10,20 @@ public  abstract class Mob extends Entity{
     protected boolean throughBomb = false;
     protected  int speed = 1;
     protected int fat = Sprite.SCALED_SIZE;
-
+    protected int height = Sprite.SCALED_SIZE / 4;
+    protected boolean dead = false;
     public Mob(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
 
     }
 
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
 
     @Override
     public void render(GraphicsContext gc) {
@@ -31,7 +39,7 @@ public  abstract class Mob extends Entity{
 
     public  boolean canMove(int x, int y) {
         int x1 = x / Sprite.SCALED_SIZE;
-        int y1 = (y + Sprite.SCALED_SIZE / 4) / Sprite.SCALED_SIZE;
+        int y1 = (y + height) / Sprite.SCALED_SIZE;
         int x2 = (x + fat - 1) / Sprite.SCALED_SIZE;
         int y2 = (y + Sprite.SCALED_SIZE - 1) / Sprite.SCALED_SIZE;
         return (BombermanGame.map[y1][x1] != '#'
