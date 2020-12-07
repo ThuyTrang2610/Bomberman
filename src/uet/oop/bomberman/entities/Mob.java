@@ -5,13 +5,23 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.graphics.Sprite;
 
-public  abstract class Mob extends Entity{
+public abstract class Mob extends Entity {
 
     protected boolean throughBomb = false;
-    protected  int speed = 1;
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    protected int speed = 1;
     protected int fat = Sprite.SCALED_SIZE;
     protected int height = Sprite.SCALED_SIZE / 4;
     protected boolean dead = false;
+
     public Mob(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
 

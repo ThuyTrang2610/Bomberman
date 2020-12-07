@@ -12,10 +12,20 @@ public class Bomber extends Mob {
     private Image move;
     private int animate = 0;
     private Bomb lastBomb;
+    private int countBomb = 1;
+
+    public int getCountBomb() {
+        return countBomb;
+    }
+
+    public void setCountBomb(int countBomb) {
+        this.countBomb = countBomb;
+    }
+
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
         fat = Sprite.SCALED_SIZE * 3 / 4;
-        speed = 2;
+        speed = 1;
     }
 
     @Override
@@ -44,27 +54,28 @@ public class Bomber extends Mob {
     public void run() {
         HashSet<String> keys = BombermanGame.getCurrentlyActiveKeys();
         if (!isDead()) {
-            if (keys.contains("LEFT") && canMove(x - 1, y)) {
+            if (keys.contains("LEFT") && canMove(x - speed, y)) {
                 x -= speed;
                 stop = Sprite.player_left.getFxImage();
                 move = Sprite.movingSprite(Sprite.player_left_1, Sprite.player_left_2, animate, 10).getFxImage();
             }
-            if (keys.contains("RIGHT") && canMove(x + 1, y)) {
+            if (keys.contains("RIGHT") && canMove(x + speed, y)) {
                 x += speed;
                 stop = Sprite.player_right.getFxImage();
                 move = Sprite.movingSprite(Sprite.player_right_1, Sprite.player_right_2, animate, 10).getFxImage();
 
             }
-            if (keys.contains("UP") && canMove(x, y - 1)) {
+            if (keys.contains("UP") && canMove(x, y - speed)) {
                 y -= speed;
                 stop = Sprite.player_up.getFxImage();
                 move = Sprite.movingSprite(Sprite.player_up_1, Sprite.player_up_2, animate, 10).getFxImage();
 
             }
-            if (keys.contains("DOWN") && canMove(x, y + 1)) {
+            if (keys.contains("DOWN") && canMove(x, y + speed)) {
                 y += speed;
                 stop = Sprite.player_down.getFxImage();
-                move = Sprite.movingSprite(Sprite.player_down_1, Sprite.player_down_2, animate, 10).getFxImage();
+                move = Sprite.movingSprite(Sprite.player_down_1,
+                        Sprite.player_down_2, animate, 10).getFxImage();
 
             }
         }
@@ -80,12 +91,15 @@ public class Bomber extends Mob {
     public void creatBomb() {
         HashSet<String> keys = BombermanGame.getCurrentlyActiveKeys();
         if (keys.contains("SPACE")) {
-            List<Entity> bomb = BombermanGame.getBombs();
-            lastBomb = new Bomb(x / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE,
-                    y / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE, Sprite.bomb.getFxImage());
-            bomb.add(lastBomb);
-            BombermanGame.setBombs(bomb);
-            throughBomb = true;
+            if (countBomb > 0) {
+                List<Entity> bomb = BombermanGame.getBombs();
+                lastBomb = new Bomb(x / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE,
+                        (y + Sprite.SCALED_SIZE / 4) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE, Sprite.bomb.getFxImage());
+                bomb.add(lastBomb);
+                BombermanGame.setBombs(bomb);
+                throughBomb = true;
+                countBomb --;
+            }
 
         }
     }
@@ -104,10 +118,6 @@ public class Bomber extends Mob {
                         || (x2 >= x3 && x2 <= x4 && y2 >= y3 && y2 <= y4)
                         || (x1 >= x3 && x1 <= x4 && y1 >= y3 && y1 <= y4)
                         || (x1 >= x3 && x1 <= x4 && y2 >= y3 && y2 <= y4)
-//                        || (y2 == y3 && x1 >= x3 && x1 <= x4)
-//                        || (y2 == y3 && x2 >= x3 && x2 <= x4)
-//                        || (y1 == y4 && x1 >= x3 && x1 <= x4)
-//                        || (y1 == y4 && x2 >= x3 && x2 <= x4)
 
         ) return true;
         return false;

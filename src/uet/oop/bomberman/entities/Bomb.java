@@ -7,7 +7,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomb extends Entity{
     int birthTime;
-
+    int animate = 0;
+    private Image move;
     public Bomb(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
         BombermanGame.map[yUnit / Sprite.SCALED_SIZE][xUnit / Sprite.SCALED_SIZE] = '.';
@@ -22,6 +23,12 @@ public class Bomb extends Entity{
 
     @Override
     public void update() {
+        animate ++;
 
+    }
+
+    public void setAnimate() {
+        move = Sprite.movingSprite(Sprite.bomb,
+                Sprite.bomb_1, Sprite.bomb_2, animate, 10).getFxImage();
     }
 }

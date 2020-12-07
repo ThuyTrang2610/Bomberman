@@ -29,6 +29,16 @@ public class BombermanGame extends Application {
     private static List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
     private  static List<Entity> bombs = new ArrayList<>();
+
+    public static List<Entity> getItems() {
+        return items;
+    }
+
+    public static void setItems(List<Entity> items) {
+        BombermanGame.items = items;
+    }
+
+    private static List<Entity> items = new ArrayList<>();
     private static HashSet<String> currentlyActiveKeys = new HashSet<>();
 
     long deadTime = 0;
@@ -152,6 +162,20 @@ public class BombermanGame extends Application {
                         break;
 
                     }
+                    case 'b' : {
+
+                        items.add(new BombItem(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.powerup_bombs.getFxImage()));
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+
+                        break;
+                    }
+                    case 's':
+                        items.add(new SpeedItem(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.powerup_speed.getFxImage()));
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+
+                        break;
                     default: {
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
                     }
@@ -163,6 +187,9 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
+        for(int i = 0; i < items.size(); i ++) {
+            items.get(i).update();
+        }
         for(int i = 0;i < entities.size(); i ++) {
             if (entities.get(i) instanceof Mob) {
                 Mob m = (Mob) entities.get(i);
@@ -196,6 +223,6 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
         bombs.forEach(g -> g.render(gc));
-
+        items.forEach(g -> g.render(gc));
     }
 }
