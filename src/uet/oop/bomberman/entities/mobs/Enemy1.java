@@ -1,12 +1,13 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.mobs;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.entities.mobs.Mob;
+import uet.oop.bomberman.entities.landscapes.graphics.Sprite;
 
 import java.util.ArrayList;
 
-public class Enemy1 extends Mob{
+public class Enemy1 extends Mob {
 
     int dir;
     int animate = 0;

@@ -1,8 +1,11 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.mobs;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.entities.Bomb;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.mobs.Mob;
+import uet.oop.bomberman.entities.landscapes.graphics.Sprite;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +16,7 @@ public class Bomber extends Mob {
     private int animate = 0;
     private Bomb lastBomb;
     private int countBomb = 1;
+    private int bombRange = 1;
 
     public int getCountBomb() {
         return countBomb;
@@ -20,6 +24,14 @@ public class Bomber extends Mob {
 
     public void setCountBomb(int countBomb) {
         this.countBomb = countBomb;
+    }
+
+    public int getBombRange() {
+        return bombRange;
+    }
+
+    public void setBombRange(int bombRange) {
+        this.bombRange = bombRange;
     }
 
     public Bomber(int x, int y, Image img) {

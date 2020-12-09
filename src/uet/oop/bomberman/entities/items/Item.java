@@ -1,12 +1,14 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.items;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.entities.mobs.Bomber;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.landscapes.graphics.Sprite;
 
 import java.util.List;
 
-public abstract class Item extends Entity{
+public abstract class Item extends Entity {
 
     public Item(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
