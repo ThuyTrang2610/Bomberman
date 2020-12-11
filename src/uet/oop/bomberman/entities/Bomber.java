@@ -92,35 +92,19 @@ public class Bomber extends Mob {
         HashSet<String> keys = BombermanGame.getCurrentlyActiveKeys();
         if (keys.contains("SPACE")) {
             if (countBomb > 0) {
-                List<Entity> bomb = BombermanGame.getBombs();
-                lastBomb = new Bomb(x / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE,
-                        (y + Sprite.SCALED_SIZE / 4) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE, Sprite.bomb.getFxImage());
-                bomb.add(lastBomb);
-                BombermanGame.setBombs(bomb);
-                throughBomb = true;
-                countBomb --;
+                if (BombermanGame.getBombs().isEmpty() ||
+                    !meet(lastBomb)) {
+                    List<Entity> bomb = BombermanGame.getBombs();
+                    lastBomb = new Bomb(x / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE,
+                            (y + Sprite.SCALED_SIZE / 4) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE, Sprite.bomb.getFxImage());
+                    bomb.add(lastBomb);
+                    BombermanGame.setBombs(bomb);
+                    throughBomb = true;
+                    countBomb--;
+                }
             }
 
         }
-    }
-
-    public boolean meet(Entity mob) {
-        int x1 = x;
-        int y1 = y;
-        int x2 = (x + Sprite.SCALED_SIZE - 1);
-        int y2 = (y + Sprite.SCALED_SIZE - 1);
-        int x3 = mob.getX();
-        int y3 = mob.getY();
-        int x4 = mob.getX() + Sprite.SCALED_SIZE - 1;
-        int y4 = mob.getY() + Sprite.SCALED_SIZE - 1;
-        if (
-                (x2 >= x3 && x2 <= x4 && y1 >= y3 && y1 <= y4)
-                        || (x2 >= x3 && x2 <= x4 && y2 >= y3 && y2 <= y4)
-                        || (x1 >= x3 && x1 <= x4 && y1 >= y3 && y1 <= y4)
-                        || (x1 >= x3 && x1 <= x4 && y2 >= y3 && y2 <= y4)
-
-        ) return true;
-        return false;
     }
 
     public void isMeet() {

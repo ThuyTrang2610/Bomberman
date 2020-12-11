@@ -29,6 +29,15 @@ public class BombermanGame extends Application {
     private static List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
     private  static List<Entity> bombs = new ArrayList<>();
+    private static List<Entity> flames = new ArrayList<>();
+
+    public static List<Entity> getFlames() {
+        return flames;
+    }
+
+    public static void setFlames(List<Entity> flames) {
+        BombermanGame.flames = flames;
+    }
 
     public static List<Entity> getItems() {
         return items;
@@ -163,18 +172,19 @@ public class BombermanGame extends Application {
 
                     }
                     case 'b' : {
-
+                        map[i][j] = ' ';
                         items.add(new BombItem(j * Sprite.SCALED_SIZE
                                 , i * Sprite.SCALED_SIZE, Sprite.powerup_bombs.getFxImage()));
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
 
                         break;
                     }
-                    case 's':
+                    case 's': {
+                        map[i][j] = ' ';
                         items.add(new SpeedItem(j * Sprite.SCALED_SIZE
                                 , i * Sprite.SCALED_SIZE, Sprite.powerup_speed.getFxImage()));
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
-
+                    }
                         break;
                     default: {
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
@@ -215,6 +225,22 @@ public class BombermanGame extends Application {
                 }
             }
         }
+
+        for(int i = 0; i < bombs.size(); i ++) {
+            Bomb b = (Bomb) bombs.get(i);
+            b.update();
+            if (b.isExploded()) {
+                bombs.remove(b);
+            }
+        }
+
+        for(int i = 0; i < flames.size(); i ++) {
+            Flame b = (Flame) flames.get(i);
+            b.update();
+            if (b.isDead()) {
+                flames.remove(b);
+            }
+        }
     }
 
     public void render() {
@@ -223,6 +249,7 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
         bombs.forEach(g -> g.render(gc));
+        flames.forEach(g -> g.render(gc));
         items.forEach(g -> g.render(gc));
     }
 }
