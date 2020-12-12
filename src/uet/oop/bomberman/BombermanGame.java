@@ -9,10 +9,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.character.Bomber;
-import uet.oop.bomberman.entities.character.Enemy1;
-import uet.oop.bomberman.entities.character.Enemy2;
+import uet.oop.bomberman.entities.character.enemy.Balloom;
+import uet.oop.bomberman.entities.character.enemy.Doll;
 import uet.oop.bomberman.entities.character.Mob;
 import uet.oop.bomberman.entities.Bomb;
+import uet.oop.bomberman.entities.character.enemy.Minvo;
 import uet.oop.bomberman.entities.item.BombItem;
 import uet.oop.bomberman.entities.item.SpeedItem;
 import uet.oop.bomberman.entities.landscape.Brick;
@@ -39,7 +40,7 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private static List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
-    private  static List<Entity> bombs = new ArrayList<>();
+    private static List<Entity> bombs = new ArrayList<>();
     private static List<Entity> flames = new ArrayList<>();
 
     public static List<Entity> getFlames() {
@@ -77,6 +78,10 @@ public class BombermanGame extends Application {
 
     public static void setCurrentlyActiveKeys(HashSet<String> currentlyActiveKeys) {
         BombermanGame.currentlyActiveKeys = currentlyActiveKeys;
+    }
+
+    public static Bomber getBomber() {
+        return (Bomber) entities.get(0);
     }
 
     public static List<Entity> getBombs() {
@@ -168,7 +173,7 @@ public class BombermanGame extends Application {
                     case '1':
                     {
 
-                        entities.add(new Enemy1(j * Sprite.SCALED_SIZE
+                        entities.add(new Balloom(j * Sprite.SCALED_SIZE
                                 , i * Sprite.SCALED_SIZE, Sprite.balloom_right1.getFxImage()));
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
 
@@ -176,9 +181,16 @@ public class BombermanGame extends Application {
                     }
                     case '2':
                     {
+                        entities.add(new Doll(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.doll_right1.getFxImage()));
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
 
-                        entities.add(new Enemy2(j * Sprite.SCALED_SIZE
-                                , i * Sprite.SCALED_SIZE, Sprite.balloom_right1.getFxImage()));
+                        break;
+                    }
+                    case '3':
+                    {
+                        entities.add(new Minvo(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.minvo_right1.getFxImage()));
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
 
                         break;
