@@ -8,6 +8,17 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.character.Bomber;
+import uet.oop.bomberman.entities.character.Enemy1;
+import uet.oop.bomberman.entities.character.Enemy2;
+import uet.oop.bomberman.entities.character.Mob;
+import uet.oop.bomberman.entities.Bomb;
+import uet.oop.bomberman.entities.item.BombItem;
+import uet.oop.bomberman.entities.item.SpeedItem;
+import uet.oop.bomberman.entities.landscape.Brick;
+import uet.oop.bomberman.entities.landscape.Flame;
+import uet.oop.bomberman.entities.landscape.Grass;
+import uet.oop.bomberman.entities.landscape.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.FileInputStream;
@@ -158,6 +169,15 @@ public class BombermanGame extends Application {
                     {
 
                         entities.add(new Enemy1(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.balloom_right1.getFxImage()));
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+
+                        break;
+                    }
+                    case '2':
+                    {
+
+                        entities.add(new Enemy2(j * Sprite.SCALED_SIZE
                                 , i * Sprite.SCALED_SIZE, Sprite.balloom_right1.getFxImage()));
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
 

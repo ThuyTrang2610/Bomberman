@@ -1,4 +1,4 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.character;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -6,11 +6,11 @@ import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
 
-public class Enemy1 extends Mob{
+public class Enemy2 extends Mob{
 
     int dir;
     int animate = 0;
-    public Enemy1 (int xUnit, int yUnit, Image img) {
+    public Enemy2(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
         fat =  Sprite.SCALED_SIZE;
         height = 0;
@@ -39,13 +39,13 @@ public class Enemy1 extends Mob{
         }
         if(dir == 3) {
             x += 1;
-            img = Sprite.movingSprite(Sprite.balloom_right1,
-                    Sprite.balloom_right2, Sprite.balloom_right3, animate, 50).getFxImage();
+            img = Sprite.movingSprite(Sprite.doll_right1,
+                    Sprite.doll_right2, Sprite.doll_right3, animate, 50).getFxImage();
         }
         if(dir == 4) {
             x -= 1;
-            img = Sprite.movingSprite(Sprite.balloom_left1,
-                    Sprite.balloom_left2, Sprite.balloom_left3, animate, 50).getFxImage();
+            img = Sprite.movingSprite(Sprite.doll_left1,
+                    Sprite.doll_left2, Sprite.doll_left3, animate, 50).getFxImage();
         }
     }
     public int directtion() {
