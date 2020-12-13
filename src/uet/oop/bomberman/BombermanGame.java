@@ -99,7 +99,7 @@ public class BombermanGame extends Application {
     }
 
     public static void main(String[] args) {
-        SoundPlayer.play("main_game", false);
+        SoundPlayer.play("main_game", true);
         Application.launch(BombermanGame.class);
     }
 
