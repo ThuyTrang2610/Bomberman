@@ -48,7 +48,7 @@ public abstract class Mob extends Entity {
 
     }
 
-    public  boolean canMove(int x, int y) {
+    public boolean canMove(int x, int y) {
         int x1 = x / Sprite.SCALED_SIZE;
         int y1 = (y + height) / Sprite.SCALED_SIZE;
         int x2 = (x + fat - 1) / Sprite.SCALED_SIZE;
@@ -66,7 +66,7 @@ public abstract class Mob extends Entity {
                 && (BombermanGame.map[y1][x2] != '.' || (BombermanGame.map[y1][x2] == '.' && throughBomb == true))
                 && (BombermanGame.map[y2][x2] != '.' || (BombermanGame.map[y2][x2] == '.' && throughBomb == true))
         );
-    };
+    }
 
     public boolean meet(Entity mob) {
         int x1 = x;

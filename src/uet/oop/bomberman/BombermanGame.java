@@ -13,6 +13,7 @@ import uet.oop.bomberman.entities.character.enemy.Balloom;
 import uet.oop.bomberman.entities.character.enemy.Doll;
 import uet.oop.bomberman.entities.character.Mob;
 import uet.oop.bomberman.entities.Bomb;
+import uet.oop.bomberman.entities.character.enemy.Kondoria;
 import uet.oop.bomberman.entities.character.enemy.Minvo;
 import uet.oop.bomberman.entities.item.BombItem;
 import uet.oop.bomberman.entities.item.SpeedItem;
@@ -81,7 +82,11 @@ public class BombermanGame extends Application {
     }
 
     public static Bomber getBomber() {
-        return (Bomber) entities.get(0);
+        if (entities.get(0) instanceof Bomber) {
+            return (Bomber) entities.get(0);
+        } else {
+            return null;
+        }
     }
 
     public static List<Entity> getBombs() {
@@ -191,6 +196,14 @@ public class BombermanGame extends Application {
                     {
                         entities.add(new Minvo(j * Sprite.SCALED_SIZE
                                 , i * Sprite.SCALED_SIZE, Sprite.minvo_right1.getFxImage()));
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+
+                        break;
+                    }
+                    case '4':
+                    {
+                        entities.add(new Kondoria(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.kondoria_right1.getFxImage()));
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
 
                         break;
