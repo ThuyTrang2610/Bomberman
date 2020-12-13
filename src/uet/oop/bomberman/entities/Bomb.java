@@ -22,7 +22,12 @@ public class Bomb extends Entity {
 
     public void explode() {
         BombermanGame.map[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] = ' ';
-        Bomber p = (Bomber) BombermanGame.getEntities().get(0);
+        Bomber p = BombermanGame.getBomber();
+
+        if (p == null) {
+            return;
+        }
+
         p.setCountBomb(p.getCountBomb() + 1);
         new Flame(x, y, Sprite.bomb_exploded.getFxImage());
 

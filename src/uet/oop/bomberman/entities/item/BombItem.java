@@ -12,8 +12,11 @@ public class BombItem extends Item{
     @Override
     public void update() {
         if(isMeet()) {
-            ((Bomber)BombermanGame.getEntities().get(0))
-                    .setCountBomb(((Bomber)BombermanGame.getEntities().get(0)).getCountBomb() + 1);
+            Bomber bomber = BombermanGame.getBomber();
+            if (bomber == null) {
+                return;
+            }
+            bomber.setCountBomb(bomber.getCountBomb() + 1);
         }
         super.update();
     }

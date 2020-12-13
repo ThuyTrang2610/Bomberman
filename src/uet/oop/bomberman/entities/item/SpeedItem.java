@@ -14,8 +14,11 @@ public class SpeedItem extends Item{
         super.update();
 
         if(isMeet()) {
-            Bomber tmp = (Bomber) BombermanGame.getEntities().get(0);
-                    tmp.setSpeed(tmp.getSpeed() * 2);
+            Bomber bomber = BombermanGame.getBomber();
+            if (bomber == null) {
+                return;
+            }
+            bomber.setSpeed(bomber.getSpeed() * 2);
         }
     }
 }

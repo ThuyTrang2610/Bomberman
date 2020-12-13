@@ -108,13 +108,7 @@ public abstract class Entity {
                 }
             }
         }
-        for(int i = 0 ; i < distMap.length ; i++) {
-            for (int j = 0 ; j < distMap[0].length ; j++) {
-                System.out.print(distMap[i][j]+ " ");
-            }
-            System.out.println();
-        }
-        System.out.println("\n\n");
+
         return distMap;
     }
 }
