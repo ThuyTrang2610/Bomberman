@@ -1,12 +1,9 @@
 package uet.oop.bomberman.entities.character.enemy;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.entities.character.Mob;
 import uet.oop.bomberman.entities.character.enemy.ai.AIRandom;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.util.ArrayList;
 
 public class Balloom extends AIRandom {
     public Balloom(int xUnit, int yUnit, Image img) {

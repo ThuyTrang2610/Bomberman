@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.character;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.effects.sounds.SoundPlayer;
 import uet.oop.bomberman.entities.Bomb;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
@@ -80,6 +81,8 @@ public class Bomber extends Mob {
                         Sprite.player_down_2, animate, 10).getFxImage();
 
             }
+        } else {
+            return;
         }
         isMeet();
         if (keys.isEmpty()) {

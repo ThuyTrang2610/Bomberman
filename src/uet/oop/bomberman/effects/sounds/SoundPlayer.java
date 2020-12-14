@@ -15,7 +15,8 @@ public class SoundPlayer {
                     Clip clip = AudioSystem.getClip();
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream(
                             SoundPlayer.class.getResourceAsStream("/sounds/" + sound + ".wav"));
-                    clip.open(inputStream);
+                    clip.
+                            open(inputStream);
 
                     if (loop) {
                         clip.loop(Clip.LOOP_CONTINUOUSLY);

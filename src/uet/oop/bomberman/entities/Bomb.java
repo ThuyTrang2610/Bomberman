@@ -3,6 +3,7 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.effects.sounds.SoundPlayer;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.landscape.Flame;
@@ -21,7 +22,7 @@ public class Bomb extends Entity {
     }
 
     public void explode() {
-        BombermanGame.map[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] = ' ';
+        BombermanGame.map[this.getGridY()][this.getGridX()] = ' ';
         Bomber p = BombermanGame.getBomber();
 
         if (p == null) {
@@ -31,53 +32,52 @@ public class Bomb extends Entity {
         p.setCountBomb(p.getCountBomb() + 1);
         new Flame(x, y, Sprite.bomb_exploded.getFxImage());
 
-        int i = 0;
-        while (i < power
-                && BombermanGame.map[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE + i + 1] == ' ') {
-            new Flame(x + (i + 1) * Sprite.SCALED_SIZE, y, Sprite.explosion_horizontal.getFxImage());
-            i ++;
+        int[] xNextDirection = {0, 0, 1, -1};
+        int[] yNextDirection = {1, -1, 0, 0};
+
+        for (int idx = 0 ; idx < 4 ; idx++) {
+            Image spriteImage;
+
+            for (int pos = 1 ; pos <= power ; pos++) {
+                int nextGridX = this.getGridX() + (xNextDirection[idx]*pos);
+                int nextGridY = this.getGridY() + (yNextDirection[idx]*pos);
+
+                if (BombermanGame.map[nextGridX][nextGridY] == '#') {
+                    break;
+                }
+
+                if (xNextDirection[idx]*pos != 0) {
+                    spriteImage = Sprite.explosion_horizontal.getFxImage();
+                } else {
+                    spriteImage = Sprite.explosion_vertical.getFxImage();
+                }
+
+                new Flame(x + (xNextDirection[idx]*pos) * Sprite.SCALED_SIZE, y + (yNextDirection[idx]*pos), spriteImage);
+            }
+
+            int nextGridX = this.getGridX() + (xNextDirection[idx]*(power+1));
+            int nextGridY = this.getGridY() + (yNextDirection[idx]*(power+1));
+
+            if (BombermanGame.map[nextGridY][nextGridX] == '#') {
+                continue;
+            }
+
+            if (xNextDirection[idx] * (power+1) > 0) {
+                spriteImage = Sprite.explosion_horizontal_right_last.getFxImage();
+            } else if (xNextDirection[idx] * (power+1) < 0) {
+                spriteImage = Sprite.explosion_horizontal_left_last.getFxImage();
+            } else if (yNextDirection[idx] * (power+1) > 0) {
+                spriteImage = Sprite.explosion_vertical_down_last.getFxImage();
+            } else if (yNextDirection[idx] * (power+1) < 0) {
+                spriteImage = Sprite.explosion_vertical_top_last.getFxImage();
+            } else {
+                continue;
+            }
+            new Flame(nextGridX * Sprite.SCALED_SIZE, nextGridY * Sprite.SCALED_SIZE, spriteImage);
         }
 
-        if (BombermanGame.map[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE + i + 1] == ' ') {
-            new Flame(x + (i + 1) * Sprite.SCALED_SIZE, y, Sprite.explosion_horizontal_right_last.getFxImage());
-
-        }
-
-        i = 0;
-        while (i < power
-                && BombermanGame.map[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE - i - 1] == ' ') {
-            new Flame(x - (i + 1) * Sprite.SCALED_SIZE, y, Sprite.explosion_horizontal.getFxImage());
-            i ++;
-        }
-
-        if (BombermanGame.map[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE - i - 1] == ' ') {
-            new Flame(x - (i + 1) * Sprite.SCALED_SIZE, y, Sprite.explosion_horizontal_left_last.getFxImage());
-
-        }
-
-        i = 0;
-        while (i < power
-                && BombermanGame.map[y / Sprite.SCALED_SIZE - i - 1][x / Sprite.SCALED_SIZE] == ' ') {
-            new Flame(x, y - (i + 1) * Sprite.SCALED_SIZE, Sprite.explosion_vertical.getFxImage());
-            i ++;
-        }
-
-        if (BombermanGame.map[y / Sprite.SCALED_SIZE  - i - 1][x / Sprite.SCALED_SIZE] == ' ') {
-            new Flame(x, y  - (i + 1) * Sprite.SCALED_SIZE, Sprite.explosion_vertical_top_last.getFxImage());
-
-        }
-
-        i = 0;
-        while (i < power
-                && BombermanGame.map[y / Sprite.SCALED_SIZE + i + 1][x / Sprite.SCALED_SIZE] == ' ') {
-            new Flame(x, y + (i + 1) * Sprite.SCALED_SIZE, Sprite.explosion_vertical.getFxImage());
-            i ++;
-        }
-
-        if (BombermanGame.map[y / Sprite.SCALED_SIZE  + i + 1][x / Sprite.SCALED_SIZE] == ' ') {
-            new Flame(x, y  + (i + 1) * Sprite.SCALED_SIZE, Sprite.explosion_vertical_down_last.getFxImage());
-
-        }
+        SoundPlayer.play("explosion", false);
+        exploded = true;
     }
 
     public boolean isExploded() {
@@ -98,10 +98,8 @@ public class Bomb extends Entity {
     public void update() {
         animate ++;
         setAnimate();
-        if (System.currentTimeMillis() - birthTime >= 2000)
-        {
+        if (System.currentTimeMillis() - birthTime >= 2000) {
             explode();
-            exploded = true;
         }
     }
 

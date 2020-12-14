@@ -15,9 +15,6 @@ import java.util.Arrays;
 import java.util.Queue;
 
 public class Minvo extends AIMedium {
-
-    int dir;
-    int animate = 0;
     public Minvo(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img,
                 Sprite.minvo_right1, Sprite.minvo_right2, Sprite.minvo_right3,
