@@ -17,6 +17,7 @@ import uet.oop.bomberman.entities.Bomb;
 import uet.oop.bomberman.entities.character.enemy.Kondoria;
 import uet.oop.bomberman.entities.character.enemy.Minvo;
 import uet.oop.bomberman.entities.item.BombItem;
+import uet.oop.bomberman.entities.item.FlameItem;
 import uet.oop.bomberman.entities.item.SpeedItem;
 import uet.oop.bomberman.entities.landscape.Brick;
 import uet.oop.bomberman.entities.landscape.Flame;
@@ -222,6 +223,14 @@ public class BombermanGame extends Application {
                         map[i][j] = ' ';
                         items.add(new BombItem(j * Sprite.SCALED_SIZE
                                 , i * Sprite.SCALED_SIZE, Sprite.powerup_bombs.getFxImage()));
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+
+                        break;
+                    }
+                    case 'f' : {
+                        map[i][j] = ' ';
+                        items.add(new FlameItem(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.powerup_flames.getFxImage()));
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
 
                         break;

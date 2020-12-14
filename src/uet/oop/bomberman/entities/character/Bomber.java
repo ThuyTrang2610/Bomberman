@@ -16,6 +16,15 @@ public class Bomber extends Mob {
     private Bomb lastBomb;
     private int countBomb = 1;
 
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    private int power = 0;
     public int getCountBomb() {
         return countBomb;
     }
@@ -27,7 +36,7 @@ public class Bomber extends Mob {
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
         fat = Sprite.SCALED_SIZE * 3 / 4;
-        speed = 1;
+        speed = 2;
     }
 
     @Override
