@@ -17,10 +17,7 @@ import uet.oop.bomberman.entities.character.enemy.Balloom;
 import uet.oop.bomberman.entities.character.enemy.Doll;
 import uet.oop.bomberman.entities.character.enemy.Kondoria;
 import uet.oop.bomberman.entities.character.enemy.Minvo;
-import uet.oop.bomberman.entities.item.BombItem;
-import uet.oop.bomberman.entities.item.FlameItem;
-import uet.oop.bomberman.entities.item.Portal;
-import uet.oop.bomberman.entities.item.SpeedItem;
+import uet.oop.bomberman.entities.item.*;
 import uet.oop.bomberman.entities.landscape.Brick;
 import uet.oop.bomberman.entities.landscape.Flame;
 import uet.oop.bomberman.entities.landscape.Grass;
@@ -66,6 +63,9 @@ public class BombermanGame extends Application {
         BombermanGame.items = items;
     }
 
+    public static void addItem(Item item) {
+        BombermanGame.items.add(item);
+    }
 
     private static HashSet<String> currentlyActiveKeys = new HashSet<>();
 
@@ -281,10 +281,16 @@ public class BombermanGame extends Application {
                         break;
                     }
                     case 'x': {
-                        map[i][j] = ' ';
-                        items.add(new Portal(j * Sprite.SCALED_SIZE
-                                , i * Sprite.SCALED_SIZE, Sprite.portal.getFxImage()));
-                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+                        map[i][j] = '*';
+
+                        Portal portal = new Portal(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.portal.getFxImage());
+                        Brick brick = new Brick(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.brick.getFxImage());
+                        brick.setHiddenItem(portal);
+
+                        o = brick;
+
                         break;
                     }
                     default: {
@@ -364,6 +370,10 @@ public class BombermanGame extends Application {
                     if (b.isExploded()) {
                         map[b.getGridY()][b.getGridX()] = ' ';
                         stillObjects.set(i, new Grass(b.getX(), b.getY(), Sprite.grass.getFxImage()));
+
+                        if (b.getHiddenItem() != null) {
+                            items.add(b.getHiddenItem());
+                        }
                     } else {
                         for (int j = 0; j < flames.size(); j++) {
                             Flame f = (Flame) flames.get(j);

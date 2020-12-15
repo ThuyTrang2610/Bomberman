@@ -15,6 +15,7 @@ public class Oneal extends AIHard {
 
     @Override
     public void update() {
+        setSpeed((int) (Math.random()*2));
         super.update();
     }
 }

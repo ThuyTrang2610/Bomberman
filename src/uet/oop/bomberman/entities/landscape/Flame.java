@@ -30,7 +30,7 @@ public class Flame extends Entity {
 
     @Override
     public void update() {
-        if (System.currentTimeMillis() - birthTime >= 1000) {
+        if (System.currentTimeMillis() - birthTime >= 240) {
             dead = true;
         }
         else {
