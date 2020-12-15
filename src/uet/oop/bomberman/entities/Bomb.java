@@ -13,12 +13,14 @@ public class Bomb extends Entity {
     private long birthTime;
     private boolean exploded = false;
     private int animate = 0;
-    private int power = 0;
+    private int power;
     private Image move;
+
     public Bomb(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
         BombermanGame.map[yUnit / Sprite.SCALED_SIZE][xUnit / Sprite.SCALED_SIZE] = '.';
         birthTime = System.currentTimeMillis();
+        power = ((Bomber)BombermanGame.getEntities().get(0)).getPower();
     }
 
     public void explode() {
@@ -38,11 +40,18 @@ public class Bomb extends Entity {
         for (int idx = 0 ; idx < 4 ; idx++) {
             Image spriteImage;
 
+            boolean stop = false;
             for (int pos = 1 ; pos <= power ; pos++) {
                 int nextGridX = this.getGridX() + (xNextDirection[idx]*pos);
                 int nextGridY = this.getGridY() + (yNextDirection[idx]*pos);
 
-                if (BombermanGame.map[nextGridX][nextGridY] == '#') {
+                if (nextGridX < 0 || nextGridX >= BombermanGame.WIDTH || nextGridY < 0 || nextGridY >= BombermanGame.HEIGHT) {
+                    stop = true;
+                    break;
+                }
+
+                if (BombermanGame.map[nextGridY][nextGridX] == '#') {
+                    stop = true;
                     break;
                 }
 
@@ -52,11 +61,20 @@ public class Bomb extends Entity {
                     spriteImage = Sprite.explosion_vertical.getFxImage();
                 }
 
-                new Flame(x + (xNextDirection[idx]*pos) * Sprite.SCALED_SIZE, y + (yNextDirection[idx]*pos), spriteImage);
+                new Flame(nextGridX * Sprite.SCALED_SIZE, nextGridY * Sprite.SCALED_SIZE, spriteImage);
+            }
+
+            // if already meet wall
+            if (stop) {
+                continue;
             }
 
             int nextGridX = this.getGridX() + (xNextDirection[idx]*(power+1));
             int nextGridY = this.getGridY() + (yNextDirection[idx]*(power+1));
+
+            if (nextGridX < 0 || nextGridX >= Sprite.SCALED_SIZE || nextGridY < 0 || nextGridY >= Sprite.SCALED_SIZE) {
+                continue;
+            }
 
             if (BombermanGame.map[nextGridY][nextGridX] == '#') {
                 continue;
@@ -77,7 +95,7 @@ public class Bomb extends Entity {
         }
 
         SoundPlayer.play("explosion", false);
-        exploded = true;
+        setExploded(true);
     }
 
     public boolean isExploded() {
@@ -96,10 +114,12 @@ public class Bomb extends Entity {
 
     @Override
     public void update() {
-        animate ++;
-        setAnimate();
-        if (System.currentTimeMillis() - birthTime >= 2000) {
-            explode();
+        if (!exploded) {
+            animate++;
+            setAnimate();
+            if (System.currentTimeMillis() - birthTime >= 2000) {
+                explode();
+            }
         }
     }
 

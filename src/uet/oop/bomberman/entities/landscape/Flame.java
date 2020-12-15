@@ -2,8 +2,10 @@ package uet.oop.bomberman.entities.landscape;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.entities.Bomb;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Mob;
+import uet.oop.bomberman.graphics.Sprite;
 
 public class Flame extends Entity {
     private long birthTime;
@@ -35,6 +37,13 @@ public class Flame extends Entity {
                     m.setDead(true);
                 }
             }
+
+//            for(int i = 0; i < BombermanGame.getBombs().size(); i ++) {
+//                Bomb m = (Bomb) BombermanGame.getBombs().get(i);
+//                if (!m.isExploded() && m.getX() == x && m.getY() == y) {
+//                    m.explode();
+//                }
+//            }
         }
     }
 }
