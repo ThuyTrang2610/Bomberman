@@ -41,12 +41,12 @@ public class Flame extends Entity {
                 }
             }
 
-//            for(int i = 0; i < BombermanGame.getBombs().size(); i ++) {
-//                Bomb m = (Bomb) BombermanGame.getBombs().get(i);
-//                if (!m.isExploded() && m.getX() == x && m.getY() == y) {
-//                    m.explode();
-//                }
-//            }
+            for(int i = 0; i < BombermanGame.getBombs().size(); i ++) {
+                Bomb m = (Bomb) BombermanGame.getBombs().get(i);
+                if (!m.isExploded() && m.getX() == x && m.getY() == y) {
+                    m.explode();
+                }
+            }
         }
     }
 }

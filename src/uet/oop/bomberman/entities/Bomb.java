@@ -58,6 +58,11 @@ public class Bomb extends Entity {
                 }
 
                 flames.add(new Flame(nextGridX * Sprite.SCALED_SIZE, nextGridY * Sprite.SCALED_SIZE, spriteImage));
+
+                if (BombermanGame.map[nextGridY][nextGridX] == '*') {
+                    stop = true;
+                    break;
+                }
             }
 
             // if already meet wall

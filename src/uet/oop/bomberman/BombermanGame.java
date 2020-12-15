@@ -8,13 +8,18 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.oop.bomberman.effects.sounds.SoundPlayer;
-import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.Bomb;
+import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.*;
 import uet.oop.bomberman.entities.character.Mob;
-import uet.oop.bomberman.entities.Bomb;
+import uet.oop.bomberman.entities.character.enemy.Balloom;
+import uet.oop.bomberman.entities.character.enemy.Doll;
+import uet.oop.bomberman.entities.character.enemy.Kondoria;
+import uet.oop.bomberman.entities.character.enemy.Minvo;
 import uet.oop.bomberman.entities.item.BombItem;
 import uet.oop.bomberman.entities.item.FlameItem;
+import uet.oop.bomberman.entities.item.Portal;
 import uet.oop.bomberman.entities.item.SpeedItem;
 import uet.oop.bomberman.entities.landscape.Brick;
 import uet.oop.bomberman.entities.landscape.Flame;
@@ -40,8 +45,10 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private static List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
+
     private static List<Bomb> bombs = new ArrayList<>();
     private static List<Flame> flames = new ArrayList<>();
+    private static List<Entity> items = new ArrayList<>();
 
     public static List<Flame> getFlames() {
         return flames;
@@ -59,10 +66,29 @@ public class BombermanGame extends Application {
         BombermanGame.items = items;
     }
 
-    private static List<Entity> items = new ArrayList<>();
+
     private static HashSet<String> currentlyActiveKeys = new HashSet<>();
 
     long deadTime = 0;
+    private static int level = 1;
+    long startTime = 0;
+    public static int getLevel() {
+        return level;
+    }
+
+    public static void setLevel(int level) {
+        BombermanGame.level = level;
+    }
+
+    private static boolean end = false;
+
+    public static boolean isEnd() {
+        return end;
+    }
+
+    public static void setEnd(boolean end) {
+        BombermanGame.end = end;
+    }
 
     public static HashSet<String> getCurrentlyActiveKeys() {
         return currentlyActiveKeys;
@@ -135,16 +161,24 @@ public class BombermanGame extends Application {
         };
         timer.start();
 
-
-        Entity bomberman = new Bomber(1 * Sprite.SCALED_SIZE, 1 * Sprite.SCALED_SIZE, Sprite.player_down.getFxImage());
-        entities.add(bomberman);
         createMap();
     }
 
     public void createMap() {
-        String url = "res/levels/Level1.txt";// oke
+        String url = "res/levels/Level" + level + ".txt";
+        end = false;
 
         FileInputStream fileInputStream = null;
+        deadTime = 0;
+        entities = new ArrayList<>();
+        stillObjects = new ArrayList<>();
+        bombs = new ArrayList<>();
+        flames = new ArrayList<>();
+        items = new ArrayList<>();
+
+
+        Entity bomberman = new Bomber(1 * Sprite.SCALED_SIZE, 1 * Sprite.SCALED_SIZE, Sprite.player_down.getFxImage());
+        entities.add(bomberman);
 
         try {
             fileInputStream = new FileInputStream(url);
@@ -244,8 +278,15 @@ public class BombermanGame extends Application {
                         items.add(new SpeedItem(j * Sprite.SCALED_SIZE
                                 , i * Sprite.SCALED_SIZE, Sprite.powerup_speed.getFxImage()));
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
-                    }
                         break;
+                    }
+                    case 'x': {
+                        map[i][j] = ' ';
+                        items.add(new Portal(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.portal.getFxImage()));
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+                        break;
+                    }
                     default: {
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
                     }
@@ -253,70 +294,82 @@ public class BombermanGame extends Application {
                     stillObjects.add(o);
             }
         }
-        System.out.println(stillObjects);
     }
 
     public void update() {
-        for(int i = 0; i < items.size(); i ++) {
-            items.get(i).update();
+        if(end) {
+            if (startTime == 0)
+            {
+                startTime = System.currentTimeMillis();
+            }
+            if (System.currentTimeMillis() - startTime >= 1000) {
+                createMap();
+                update();
+                render();
+                startTime = 0;
+            }
         }
+        else {
+            for (int i = 0; i < items.size(); i++) {
+                items.get(i).update();
+            }
 
-        for(int i = 0;i < entities.size(); i ++) {
-            if (entities.get(i) instanceof Mob) {
-                Mob m = (Mob) entities.get(i);
-                m.update();
-                if (m.isDead()) {
-                    if(m instanceof Bomber) {
-                        if (deadTime == 0) {
-                            deadTime = System.currentTimeMillis();
-                        } else
-                        {
-                            if (System.currentTimeMillis() - deadTime <= 1500) {
-                                m.setImg(Sprite.movingSprite(
-                                        Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3,
-                                        (int) (System.currentTimeMillis() - deadTime), 1500).getFxImage());
+            for (int i = 0; i < entities.size(); i++) {
+                if (entities.get(i) instanceof Mob) {
+                    Mob m = (Mob) entities.get(i);
+                    m.update();
+                    if (m.isDead()) {
+                        if (m instanceof Bomber) {
+                            if (deadTime == 0) {
+                                deadTime = System.currentTimeMillis();
+                            } else {
+                                if (System.currentTimeMillis() - deadTime <= 1500) {
+                                    m.setImg(Sprite.movingSprite(
+                                            Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3,
+                                            (int) (System.currentTimeMillis() - deadTime), 1500).getFxImage());
+                                } else {
+                                    entities.remove(i);
+                                    end = true;
+                                }
                             }
-                            else {
-                                entities.remove(i);
-                            }
+                        } else {
+                            entities.remove(i);
                         }
-                    } else {
-                        entities.remove(i);
                     }
                 }
             }
-        }
 
-        for(int i = 0; i < bombs.size(); i ++) {
-            Bomb b = (Bomb) bombs.get(i);
-            b.update();
-            if (b.isExploded()) {
-                bombs.remove(b);
-            }
-        }
-
-        for(int i = 0; i < flames.size(); i ++) {
-            Flame f = (Flame) flames.get(i);
-            f.update();
-            if (f.isDead()) {
-                flames.remove(f);
-            }
-        }
-
-        for (int i = 0 ; i < stillObjects.size() ; i++) {
-            Entity stillObject = stillObjects.get(i);
-            stillObject.update();
-
-            if (stillObject instanceof Brick) {
-                Brick b = (Brick) stillObject;
+            for (int i = 0; i < bombs.size(); i++) {
+                Bomb b = (Bomb) bombs.get(i);
+                b.update();
                 if (b.isExploded()) {
-                    map[b.getGridY()][b.getGridX()] = ' ';
-                    stillObjects.set(i, new Grass(b.getX(), b.getY(), Sprite.grass.getFxImage()));
-                } else {
-                    for (int j = 0; j < flames.size(); j++) {
-                        Flame f = (Flame) flames.get(j);
-                        if (f.getGridX() == stillObject.getGridX() && f.getGridY() == stillObject.getGridY()) {
-                            b.setExploding(true);
+                    bombs.remove(b);
+                }
+            }
+
+            for (int i = 0; i < flames.size(); i++) {
+                Flame f = (Flame) flames.get(i);
+                f.update();
+                if (f.isDead()) {
+                    flames.remove(f);
+                }
+            }
+
+            for (int i = 0; i < stillObjects.size(); i++) {
+                Entity stillObject = stillObjects.get(i);
+                stillObject.update();
+
+                if (stillObject instanceof Brick) {
+                    Brick b = (Brick) stillObject;
+                    if (b.isExploded()) {
+                        map[b.getGridY()][b.getGridX()] = ' ';
+                        stillObjects.set(i, new Grass(b.getX(), b.getY(), Sprite.grass.getFxImage()));
+                    } else {
+                        for (int j = 0; j < flames.size(); j++) {
+                            Flame f = (Flame) flames.get(j);
+                            if (f.getGridX() == stillObject.getGridX() && f.getGridY() == stillObject.getGridY()) {
+                                b.setExploding(true);
+                            }
                         }
                     }
                 }
