@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.character.enemy.ai;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.character.Mob;
 import uet.oop.bomberman.graphics.Sprite;
 

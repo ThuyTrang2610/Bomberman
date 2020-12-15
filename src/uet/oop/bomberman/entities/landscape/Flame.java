@@ -13,8 +13,11 @@ public class Flame extends Entity {
 
     public Flame(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
-        BombermanGame.getFlames().add(this);
         birthTime = System.currentTimeMillis();
+    }
+
+    public void start() {
+        BombermanGame.getFlames().add(this);
     }
 
     public boolean isDead() {

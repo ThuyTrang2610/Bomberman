@@ -2,9 +2,13 @@ package uet.oop.bomberman.entities.character;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.util.Pair;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
+
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public abstract class Mob extends Entity {
 
@@ -48,6 +52,58 @@ public abstract class Mob extends Entity {
 
     }
 
+    public int[][] calculateDistMap() {
+        char[][] map = BombermanGame.map;
+        int posX = this.getGridX();
+        int posY = this.getGridY();
+
+        int[][] distMap = new int[map.length][map[0].length];
+
+        int[] xNext = {1, -1, 0, 0};
+        int[] yNext = {0, 0, 1, -1};
+
+        for (int i = 0 ; i < distMap.length ; i++) {
+            for (int j = 0 ; j < distMap[0].length ; j++)
+                distMap[i][j] = -1;
+        }
+
+        Queue<Pair<Integer, Integer>> q = new ArrayDeque<>();
+        q.add(new Pair(posX, posY));
+        distMap[posY][posX] = 0;
+
+        while (!q.isEmpty()) {
+            Pair<Integer, Integer> currentPos = q.poll();
+            int currentPosX = currentPos.getKey();
+            int currentPosY = currentPos.getValue();
+
+            for (int nextIdx = 0 ; nextIdx < 4 ; nextIdx++) {
+                int nextPosX = currentPosX + xNext[nextIdx];
+                int nextPosY = currentPosY + yNext[nextIdx];
+
+                if (nextPosX <= 0 || nextPosX >= map[0].length-1 || nextPosY <= 0 || nextPosY >= map.length-1) {
+                    continue;
+                }
+
+                if (!canMove(nextPosX * Sprite.SCALED_SIZE, nextPosY * Sprite.SCALED_SIZE)) {
+                    continue;
+                }
+
+                if (distMap[nextPosY][nextPosX] == -1 || distMap[nextPosY][nextPosX] > distMap[currentPosY][currentPosX]+1) {
+                    distMap[nextPosY][nextPosX] = distMap[currentPosY][currentPosX]+1;
+                    q.add(new Pair(nextPosX, nextPosY));
+                }
+            }
+        }
+
+        return distMap;
+    }
+
+    /**
+     * Can move to PIXEL
+     * @param x
+     * @param y
+     * @return
+     */
     public boolean canMove(int x, int y) {
         int x1 = x / Sprite.SCALED_SIZE;
         int y1 = (y + height) / Sprite.SCALED_SIZE;

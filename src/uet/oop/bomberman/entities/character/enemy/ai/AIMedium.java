@@ -42,7 +42,7 @@ public class AIMedium extends AIRandom {
                 continue;
             }
 
-            if (bestDist > distMap[nextPosY][nextPosX]) {
+            if (bestDist > distMap[nextPosY][nextPosX] && canMove(nextPosX * Sprite.SCALED_SIZE, nextPosY * Sprite.SCALED_SIZE)) {
                 bestX = nextPosX;
                 bestY = nextPosY;
                 bestDist = distMap[nextPosY][nextPosX];
@@ -58,7 +58,7 @@ public class AIMedium extends AIRandom {
         } else if (bestX == getGridX()+1){
             return 3;
         } else {
-            return 0;
+            return super.direction();
         }
     }
 }

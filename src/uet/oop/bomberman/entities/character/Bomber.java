@@ -108,7 +108,7 @@ public class Bomber extends Mob {
             if (countBomb > 0) {
                 if (BombermanGame.getBombs().isEmpty() ||
                     !meet(lastBomb)) {
-                    List<Entity> bomb = BombermanGame.getBombs();
+                    List<Bomb> bomb = BombermanGame.getBombs();
                     lastBomb = new Bomb(x / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE,
                             (y + Sprite.SCALED_SIZE / 4) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE, Sprite.bomb.getFxImage());
                     bomb.add(lastBomb);

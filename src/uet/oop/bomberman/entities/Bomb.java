@@ -9,6 +9,8 @@ import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.landscape.Flame;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.util.ArrayList;
+
 public class Bomb extends Entity {
     private long birthTime;
     private boolean exploded = false;
@@ -23,16 +25,10 @@ public class Bomb extends Entity {
         power = ((Bomber)BombermanGame.getEntities().get(0)).getPower();
     }
 
-    public void explode() {
-        BombermanGame.map[this.getGridY()][this.getGridX()] = ' ';
-        Bomber p = BombermanGame.getBomber();
+    public ArrayList<Flame> getFlames() {
+        ArrayList<Flame> flames = new ArrayList<>();
 
-        if (p == null) {
-            return;
-        }
-
-        p.setCountBomb(p.getCountBomb() + 1);
-        new Flame(x, y, Sprite.bomb_exploded.getFxImage());
+        flames.add(new Flame(x, y, Sprite.bomb_exploded.getFxImage()));
 
         int[] xNextDirection = {0, 0, 1, -1};
         int[] yNextDirection = {1, -1, 0, 0};
@@ -61,7 +57,7 @@ public class Bomb extends Entity {
                     spriteImage = Sprite.explosion_vertical.getFxImage();
                 }
 
-                new Flame(nextGridX * Sprite.SCALED_SIZE, nextGridY * Sprite.SCALED_SIZE, spriteImage);
+                flames.add(new Flame(nextGridX * Sprite.SCALED_SIZE, nextGridY * Sprite.SCALED_SIZE, spriteImage));
             }
 
             // if already meet wall
@@ -91,7 +87,24 @@ public class Bomb extends Entity {
             } else {
                 continue;
             }
-            new Flame(nextGridX * Sprite.SCALED_SIZE, nextGridY * Sprite.SCALED_SIZE, spriteImage);
+            flames.add(new Flame(nextGridX * Sprite.SCALED_SIZE, nextGridY * Sprite.SCALED_SIZE, spriteImage));
+        }
+
+        return flames;
+    }
+
+    public void explode() {
+        BombermanGame.map[this.getGridY()][this.getGridX()] = ' ';
+        Bomber p = BombermanGame.getBomber();
+
+        if (p == null) {
+            return;
+        }
+
+        p.setCountBomb(p.getCountBomb() + 1);
+
+        for (Flame flame : getFlames()) {
+            flame.start();
         }
 
         SoundPlayer.play("explosion", false);

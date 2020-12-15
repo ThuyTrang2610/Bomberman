@@ -10,12 +10,9 @@ import javafx.stage.Stage;
 import uet.oop.bomberman.effects.sounds.SoundPlayer;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.character.Bomber;
-import uet.oop.bomberman.entities.character.enemy.Balloom;
-import uet.oop.bomberman.entities.character.enemy.Doll;
+import uet.oop.bomberman.entities.character.enemy.*;
 import uet.oop.bomberman.entities.character.Mob;
 import uet.oop.bomberman.entities.Bomb;
-import uet.oop.bomberman.entities.character.enemy.Kondoria;
-import uet.oop.bomberman.entities.character.enemy.Minvo;
 import uet.oop.bomberman.entities.item.BombItem;
 import uet.oop.bomberman.entities.item.FlameItem;
 import uet.oop.bomberman.entities.item.SpeedItem;
@@ -43,14 +40,14 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private static List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
-    private static List<Entity> bombs = new ArrayList<>();
-    private static List<Entity> flames = new ArrayList<>();
+    private static List<Bomb> bombs = new ArrayList<>();
+    private static List<Flame> flames = new ArrayList<>();
 
-    public static List<Entity> getFlames() {
+    public static List<Flame> getFlames() {
         return flames;
     }
 
-    public static void setFlames(List<Entity> flames) {
+    public static void setFlames(List<Flame> flames) {
         BombermanGame.flames = flames;
     }
 
@@ -91,11 +88,11 @@ public class BombermanGame extends Application {
         }
     }
 
-    public static List<Entity> getBombs() {
+    public static List<Bomb> getBombs() {
         return bombs;
     }
 
-    public static void setBombs(List<Entity> bombs) {
+    public static void setBombs(List<Bomb> bombs) {
         BombermanGame.bombs = bombs;
     }
 
@@ -206,6 +203,14 @@ public class BombermanGame extends Application {
                     {
                         entities.add(new Kondoria(j * Sprite.SCALED_SIZE
                                 , i * Sprite.SCALED_SIZE, Sprite.kondoria_right1.getFxImage()));
+                        o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
+
+                        break;
+                    }
+                    case '5':
+                    {
+                        entities.add(new Oneal(j * Sprite.SCALED_SIZE
+                                , i * Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage()));
                         o = new Grass(j * Sprite.SCALED_SIZE, i * Sprite.SCALED_SIZE, Sprite.grass.getFxImage());
 
                         break;
