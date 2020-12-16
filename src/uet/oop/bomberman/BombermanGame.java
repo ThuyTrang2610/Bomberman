@@ -7,7 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-import uet.oop.bomberman.effects.sounds.SoundPlayer;
+import uet.oop.bomberman.effects.sounds.Sound;
+import uet.oop.bomberman.effects.sounds.SoundEffect;
 import uet.oop.bomberman.entities.Bomb;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
@@ -123,7 +124,6 @@ public class BombermanGame extends Application {
     }
 
     public static void main(String[] args) {
-        SoundPlayer.play("main_game", true);
         Application.launch(BombermanGame.class);
     }
 
@@ -165,6 +165,7 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
+        SoundEffect.start.play();
         String url = "res/levels/Level" + level + ".txt";
         end = false;
 
@@ -329,11 +330,13 @@ public class BombermanGame extends Application {
                             if (deadTime == 0) {
                                 deadTime = System.currentTimeMillis();
                             } else {
-                                if (System.currentTimeMillis() - deadTime <= 1500) {
+                                if (System.currentTimeMillis() - deadTime <= 1000) {
+                                    SoundEffect.death.play();
                                     m.setImg(Sprite.movingSprite(
                                             Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3,
                                             (int) (System.currentTimeMillis() - deadTime), 1500).getFxImage());
                                 } else {
+                                    SoundEffect.death.stop();
                                     entities.remove(i);
                                     end = true;
                                 }

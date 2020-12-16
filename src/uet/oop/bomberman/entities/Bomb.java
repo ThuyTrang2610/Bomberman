@@ -3,7 +3,7 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.effects.sounds.SoundPlayer;
+import uet.oop.bomberman.effects.sounds.Sound;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.landscape.Flame;
@@ -99,6 +99,7 @@ public class Bomb extends Entity {
     }
 
     public void explode() {
+        new Sound("sounds/explosion.wav", 0).play();
         BombermanGame.map[this.getGridY()][this.getGridX()] = ' ';
         Bomber p = BombermanGame.getBomber();
 
@@ -111,8 +112,6 @@ public class Bomb extends Entity {
         for (Flame flame : getFlames()) {
             flame.start();
         }
-
-        SoundPlayer.play("explosion", false);
         setExploded(true);
     }
 
